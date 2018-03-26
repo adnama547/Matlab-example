@@ -1,0 +1,550 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Proliferation Model Exploration</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-09-25"><meta name="DC.source" content="loop.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Proliferation Model Exploration</h1><!--introduction--><p>Looking at proliferation and conversion of epithelial and mesenchymal cells using this system of equations:</p><p><img src="loop_eq04723870775695074447.png" alt="$$ dE/dt=pE-rE+qM $$" style="width:116px;height:11px;"></p><p><img src="loop_eq03413205427047943658.png" alt="$$ dM/dt=M+rE-qM $$" style="width:117px;height:11px;"></p><p>where <img src="loop_eq18366674464628612745.png" alt="$$ p $$" style="width:6px;height:8px;"> is relative proliferation of E compared to M</p><p>and</p><p><img src="loop_eq04171068318652684709.png" alt="$$ r $$" style="width:5px;height:6px;"> is percent of cells that convert from E to M at a given time</p><p>and</p><p><img src="loop_eq11902342074783106590.png" alt="$$ q $$" style="width:5px;height:8px;"> is percent of cells that convert from M to E at a given time.</p><p>Also look at adding feedback using these equations:</p><p><img src="loop_eq04723870775695074447.png" alt="$$ dE/dt=pE-rE+qM $$" style="width:116px;height:11px;"></p><p><img src="loop_eq03413205427047943658.png" alt="$$ dM/dt=M+rE-qM $$" style="width:117px;height:11px;"></p><p>where</p><p><img src="loop_eq15947899874689600346.png" alt="$$ r=sM/(M+E) $$" style="width:84px;height:11px;"></p><p><img src="loop_eq12745317206863151685.png" alt="$$ q=wE/(M+E) $$" style="width:84px;height:11px;"></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Effect of p and r - where are steady states?</a></li><li><a href="#2">Effect of starting ratio of E amd M with different r</a></li><li><a href="#3">Effect of starting ratio of E and M with different p</a></li><li><a href="#4">Effect of r and p - where are steady states?</a></li><li><a href="#5">Summary of proliferation and conversion from E to M</a></li><li><a href="#6">Effect of p and z - where are steady states with feedback?</a></li><li><a href="#7">Summary of proliferation and conversion with feedback</a></li><li><a href="#8">Effect of starting ratio of E amd M with different p</a></li><li><a href="#9">Effect of starting ratio of E and M with different z</a></li><li><a href="#10">phase portrait</a></li></ul></div><h2 id="1">Effect of p and r - where are steady states?</h2><p>p is ratio of proliferation rates, Rate(E)/Rate(M). Ranges from 0 to 2. r is rate of conversion from E to M. Ranges from 0 to 1. q is zero.</p><pre class="codeinput">set(0,<span class="string">'defaultfigureposition'</span>,[1300 10 800 800])
+
+hold <span class="string">off</span>;
+ststs=zeros(21,21);
+<span class="keyword">for</span> j=1:1:21
+    subplot(3,7,j);
+    xlabel(<span class="string">'time'</span>,<span class="string">'FontSize'</span>,14)
+    ylabel(<span class="string">'E/(E+M)'</span>,<span class="string">'FontSize'</span>,14)
+    p=j*0.1-0.1;
+    title([<span class="string">'p='</span> num2str(p)])
+    axis([0,50,0,1])
+    hold <span class="string">on</span>;
+    <span class="keyword">for</span> k=1:1:21
+        r=k*.05-.05;
+        E0=0.5;         <span class="comment">%(initial rate of change of</span>
+        M0=0.5;           <span class="comment">%E and M don't appear to matter)</span>
+        tspan=[0 50];
+        y0=[4,6];      <span class="comment">%(if both start out as zero weird things happen initially)</span>
+        yp0=[E0;M0];
+        option = odeset(<span class="string">'RelTol'</span>, 10^-4);
+        [t,y]=ode15i(<span class="string">'example1'</span>, tspan, y0, yp0, option, r, p);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        semilogy(t,prop)
+        ststs(j,k)=prop(end);
+    <span class="keyword">end</span>
+    hold <span class="string">off</span>;
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="loop_01.png" style="width:800px;height:800px;" alt=""> <h2 id="2">Effect of starting ratio of E amd M with different r</h2><p>Does the starting amounts of E and M affect steady states?</p><pre class="codeinput">hold <span class="string">off</span>;
+<span class="keyword">for</span> k=1:1:20
+    r=.05*k;
+    h=subplot(5,4,k);
+    <span class="keyword">for</span> i=1:1:20
+        title([<span class="string">'r='</span> num2str(r)])
+        axis([0,50,0,1])
+        xlabel(<span class="string">'time'</span>,<span class="string">'FontSize'</span>, 14)
+        ylabel(<span class="string">'E/(E+M)'</span>,<span class="string">'FontSize'</span>,14)
+        E0=i;
+        M0=20-i;
+        d=1.8;
+        <span class="comment">%r=.6;</span>
+        tspan=[0 50];
+        y0=[E0;M0];
+        yp0=[.5;-.5];
+        option = odeset(<span class="string">'RelTol'</span>, 10^-4);
+        [t,y]=ode15i(<span class="string">'example1'</span>, tspan, y0, yp0, option, r, d);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        plot(t,prop)
+        hold <span class="string">on</span>;
+    <span class="keyword">end</span>
+    hold <span class="string">off</span>;
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="loop_02.png" style="width:800px;height:800px;" alt=""> <h2 id="3">Effect of starting ratio of E and M with different p</h2><p>Does the starting amounts of E and M affect steady states?</p><pre class="codeinput">hold <span class="string">off</span>;
+<span class="keyword">for</span> k=1:1:21
+    d=.1*k-.1;
+    h=subplot(3,7,k);
+    <span class="keyword">for</span> i=1:1:21
+        title([<span class="string">'p='</span> num2str(d)])
+        axis([0,50,0,1])
+        xlabel(<span class="string">'time'</span>,<span class="string">'FontSize'</span>, 14)
+        ylabel(<span class="string">'E/(E+M)'</span>,<span class="string">'FontSize'</span>,14)
+        E0=i-1;
+        M0=21-i;
+        <span class="comment">%d=1.8;</span>
+        r=.2;
+        tspan=[0 50];
+        y0=[E0;M0];
+        yp0=[.5;-.5];
+        option = odeset(<span class="string">'RelTol'</span>, 10^-4);
+        [t,y]=ode15i(<span class="string">'example1'</span>, tspan, y0, yp0, option, r, d);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        plot(t,prop)
+        hold <span class="string">on</span>;
+    <span class="keyword">end</span>
+    hold <span class="string">off</span>;
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="loop_03.png" style="width:800px;height:800px;" alt=""> <h2 id="4">Effect of r and p - where are steady states?</h2><p>r is rate of conversion from E to M. Ranges from 0 to 1. d is ratio of proliferation rates, Rate(E)/Rate(M). Ranges from 0 to 2.</p><pre class="codeinput">hold <span class="string">off</span>;
+<span class="keyword">for</span> j=1:1:20
+    <span class="comment">%j=18;</span>
+    h=subplot(5,4,j);
+    xlabel(<span class="string">'time'</span>,<span class="string">'FontSize'</span>,14)
+    ylabel(<span class="string">'E/(E+M)'</span>,<span class="string">'FontSize'</span>,14)
+    r=j*0.05-.05;
+    title([<span class="string">'r='</span> num2str(r)])
+    axis([0,100,0,1])
+    <span class="comment">%hold on;</span>
+    <span class="keyword">for</span> p=0:0.1:2
+        hold <span class="string">on</span>;
+        E0=0.5;         <span class="comment">%initial rate of change of</span>
+        M0=0.5;           <span class="comment">%E and M don't matter for r=.4 and d=1.8</span>
+        tspan=[0 100];
+        y0=[4,6];      <span class="comment">%if both start out as zero weird things happen initially</span>
+        yp0=[E0;M0];
+        option = odeset(<span class="string">'RelTol'</span>, 10^-4);
+        [t,y]=ode15i(<span class="string">'example1'</span>, tspan, y0, yp0, option, r, d);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        semilogy(t,prop)
+    <span class="keyword">end</span>
+    hold <span class="string">off</span>;
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="loop_04.png" style="width:800px;height:800px;" alt=""> <h2 id="5">Summary of proliferation and conversion from E to M</h2><p>generate heat map of steady states</p><pre class="codeinput">clf;
+hold <span class="string">off</span>;
+x=[0:.05:.2];
+y=[1:.1:2];
+imagesc(x,y,ststs(10:21,1:5));
+set(gca,<span class="string">'YDir'</span>,<span class="string">'normal'</span>)
+xlabel(<span class="string">'Probability of conversion'</span>,<span class="string">'FontSize'</span>,14)
+ylabel(<span class="string">'Ratio of proliferation rates'</span>,<span class="string">'FontSize'</span>,14)
+g=colorbar;
+ylabel(g, <span class="string">'% Epithelial cells'</span>,<span class="string">'FontSize'</span>,14)
+title(<span class="string">'Heatmap of steady state proportion of epithelial cells'</span>,<span class="string">'FontSize'</span>,14)
+</pre><img vspace="5" hspace="5" src="loop_05.png" style="width:800px;height:800px;" alt=""> <h2 id="6">Effect of p and z - where are steady states with feedback?</h2><p>z represents feedback, range from -1 to 1 p is ratio of proliferation rates, Rate(E)/Rate(M). Ranges from 0 to 2.</p><pre class="codeinput">clf;
+hold <span class="string">off</span>;
+ststs=zeros(21,21);
+<span class="keyword">for</span> j=1:1:21
+    <span class="comment">%j=18;</span>
+    subplot(3,7,j);
+    xlabel(<span class="string">'time'</span>,<span class="string">'FontSize'</span>,14)
+    ylabel(<span class="string">'E/(E+M)'</span>,<span class="string">'FontSize'</span>,14)
+    p=j*0.1-0.1;
+    title([<span class="string">'p='</span> num2str(p)])
+    axis([0,50,0,1])
+    hold <span class="string">on</span>;
+    <span class="keyword">for</span> k=1:1:21
+        <span class="comment">%hold on;</span>
+        title([<span class="string">'p='</span> num2str(p)])
+        z=k*.1-1.1;
+        E0=0.5;         <span class="comment">%initial rate of change of</span>
+        M0=0.5;           <span class="comment">%E and M don't matter for r=.4 and d=1.8</span>
+        tspan=[0 50];
+        y0=[4,6];      <span class="comment">%if both start out as zero weird things happen initially</span>
+        yp0=[E0;M0];
+        option = odeset(<span class="string">'RelTol'</span>, 10^-4);
+        [t,y]=ode15i(<span class="string">'example3'</span>, tspan, y0, yp0, option, p, z);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        semilogy(t,prop)
+        ststs(j,k)=prop(end);
+    <span class="keyword">end</span>
+    hold <span class="string">off</span>;
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="loop_06.png" style="width:800px;height:800px;" alt=""> <h2 id="7">Summary of proliferation and conversion with feedback</h2><p>Generate heat map of steady states with feedback</p><pre class="codeinput">clf;
+hold <span class="string">off</span>;
+x=[-1:.1:1];
+y=[0:.1:2];
+imagesc(x,y,ststs);
+set(gca,<span class="string">'YDir'</span>,<span class="string">'normal'</span>)
+xlabel(<span class="string">'Feedback: hi ep fb &amp; lo mes fb --&gt; lo ep fb &amp; hi mes fb'</span>,<span class="string">'FontSize'</span>,14)
+ylabel(<span class="string">'Ratio of proliferation rates'</span>,<span class="string">'FontSize'</span>,14)
+g=colorbar;
+ylabel(g, <span class="string">'% Epithelial cells'</span>,<span class="string">'FontSize'</span>,14)
+title(<span class="string">'Heatmap of steady state proportion of epithelial cells'</span>,<span class="string">'FontSize'</span>,14)
+<span class="comment">%colormapeditor</span>
+</pre><img vspace="5" hspace="5" src="loop_07.png" style="width:800px;height:800px;" alt=""> <h2 id="8">Effect of starting ratio of E amd M with different p</h2><pre class="codeinput"><span class="comment">%Does the starting amounts of E and M affect steady states?</span>
+hold <span class="string">off</span>;
+<span class="keyword">for</span> k=1:1:21
+    p=.1*k-.1;
+    h=subplot(7,3,k);
+
+    <span class="keyword">for</span> i=0:1:20
+        title([<span class="string">'p='</span> num2str(p)])
+        axis([0,50,0,1])
+        xlabel(<span class="string">'time'</span>,<span class="string">'FontSize'</span>, 14)
+        ylabel(<span class="string">'E/(E+M)'</span>,<span class="string">'FontSize'</span>,14)
+        E0=i;
+        M0=20-i;
+        z=1;
+        tspan=[0 50];
+        y0=[E0;M0];
+        yp0=[.5;-.5];
+        option = odeset(<span class="string">'RelTol'</span>, 10^-4);
+        [t,y]=ode15i(<span class="string">'example3'</span>, tspan, y0, yp0, option, p, z);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        plot(t,prop)
+        hold <span class="string">on</span>;
+    <span class="keyword">end</span>
+    hold <span class="string">off</span>;
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="loop_08.png" style="width:800px;height:800px;" alt=""> <h2 id="9">Effect of starting ratio of E and M with different z</h2><p>Does the starting amounts of E and M affect steady states?</p><pre class="codeinput">clf;
+hold <span class="string">off</span>;
+<span class="keyword">for</span> k=1:1:21
+    z=.1*k-1.1;
+    h=subplot(3,7,k);
+    <span class="keyword">for</span> i=1:1:21
+        title([<span class="string">'z='</span> num2str(z)])
+        axis([0,100,0,1])
+        xlabel(<span class="string">'time'</span>,<span class="string">'FontSize'</span>, 14)
+        ylabel(<span class="string">'E/(E+M)'</span>,<span class="string">'FontSize'</span>,14)
+        E0=i-1;
+        M0=21-i;
+        <span class="comment">%d=1.8;</span>
+        p=1;
+        tspan=[0 100];
+        y0=[E0;M0];
+        yp0=[.5;-.5];
+        option = odeset(<span class="string">'RelTol'</span>, 10^-4);
+        [t,y]=ode15i(<span class="string">'example3'</span>, tspan, y0, yp0, option, p, z);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        plot(t,prop)
+        hold <span class="string">on</span>;
+    <span class="keyword">end</span>
+    hold <span class="string">off</span>;
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Warning: Failure at t=4.961763e+01.  Unable to meet integration tolerances
+without reducing the step size below the smallest value allowed (1.762773e-13)
+at time t. 
+Warning: Failure at t=5.799341e+01.  Unable to meet integration tolerances
+without reducing the step size below the smallest value allowed (2.060340e-13)
+at time t. 
+Warning: Failure at t=6.574501e+01.  Unable to meet integration tolerances
+without reducing the step size below the smallest value allowed (2.335732e-13)
+at time t. 
+Warning: Failure at t=7.351297e+01.  Unable to meet integration tolerances
+without reducing the step size below the smallest value allowed (2.611705e-13)
+at time t. 
+Warning: Failure at t=8.425469e+01.  Unable to meet integration tolerances
+without reducing the step size below the smallest value allowed (2.993328e-13)
+at time t. 
+</pre><img vspace="5" hspace="5" src="loop_09.png" style="width:800px;height:800px;" alt=""> <h2 id="10">phase portrait</h2><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Proliferation Model Exploration
+% Looking at proliferation and conversion of epithelial and mesenchymal cells
+% using this system of equations:
+% 
+% $$ dE/dt=pE-rE+qM $$
+% 
+% $$ dM/dt=M+rE-qM $$
+% 
+% where 
+% $$ p $$ is relative proliferation of E compared to M 
+% 
+% and 
+% 
+% $$ r $$ is percent of cells that convert from E to M at a given time
+% 
+% and 
+% 
+% $$ q $$ is percent of cells that convert from M to E at a given time.
+%
+% Also look at adding feedback using these equations:
+% 
+% $$ dE/dt=pE-rE+qM $$
+% 
+% $$ dM/dt=M+rE-qM $$
+% 
+% where
+% 
+% $$ r=sM/(M+E) $$
+% 
+% $$ q=wE/(M+E) $$
+%
+%% Effect of p and r - where are steady states?
+% p is ratio of proliferation rates, Rate(E)/Rate(M). Ranges from 0 to 2.
+% r is rate of conversion from E to M. Ranges from 0 to 1.
+% q is zero.
+set(0,'defaultfigureposition',[1300 10 800 800])
+
+hold off;
+ststs=zeros(21,21);
+for j=1:1:21
+    subplot(3,7,j);
+    xlabel('time','FontSize',14)
+    ylabel('E/(E+M)','FontSize',14)
+    p=j*0.1-0.1;
+    title(['p=' num2str(p)])
+    axis([0,50,0,1])
+    hold on;
+    for k=1:1:21
+        r=k*.05-.05;
+        E0=0.5;         %(initial rate of change of
+        M0=0.5;           %E and M don't appear to matter)
+        tspan=[0 50];  
+        y0=[4,6];      %(if both start out as zero weird things happen initially)
+        yp0=[E0;M0];
+        option = odeset('RelTol', 10^-4);
+        [t,y]=ode15i('example1', tspan, y0, yp0, option, r, p);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        semilogy(t,prop)
+        ststs(j,k)=prop(end);
+    end
+    hold off;
+end
+
+%% Effect of starting ratio of E amd M with different r
+% Does the starting amounts of E and M affect steady states?
+hold off;
+for k=1:1:20
+    r=.05*k;
+    h=subplot(5,4,k);
+    for i=1:1:20
+        title(['r=' num2str(r)])
+        axis([0,50,0,1])
+        xlabel('time','FontSize', 14)
+        ylabel('E/(E+M)','FontSize',14)
+        E0=i;
+        M0=20-i;
+        d=1.8;
+        %r=.6;
+        tspan=[0 50];
+        y0=[E0;M0];
+        yp0=[.5;-.5];
+        option = odeset('RelTol', 10^-4);
+        [t,y]=ode15i('example1', tspan, y0, yp0, option, r, d);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        plot(t,prop)
+        hold on;
+    end
+    hold off;
+end
+
+%% Effect of starting ratio of E and M with different p
+% Does the starting amounts of E and M affect steady states?
+hold off;
+for k=1:1:21
+    d=.1*k-.1;
+    h=subplot(3,7,k);
+    for i=1:1:21
+        title(['p=' num2str(d)])
+        axis([0,50,0,1])
+        xlabel('time','FontSize', 14)
+        ylabel('E/(E+M)','FontSize',14)
+        E0=i-1;
+        M0=21-i;
+        %d=1.8;
+        r=.2;
+        tspan=[0 50];
+        y0=[E0;M0];
+        yp0=[.5;-.5];
+        option = odeset('RelTol', 10^-4);
+        [t,y]=ode15i('example1', tspan, y0, yp0, option, r, d);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        plot(t,prop)
+        hold on;
+    end
+    hold off;
+end
+%% Effect of r and p - where are steady states?
+% r is rate of conversion from E to M. Ranges from 0 to 1.
+% d is ratio of proliferation rates, Rate(E)/Rate(M). Ranges from 0 to 2.
+hold off;
+for j=1:1:20
+    %j=18;
+    h=subplot(5,4,j);
+    xlabel('time','FontSize',14)
+    ylabel('E/(E+M)','FontSize',14)
+    r=j*0.05-.05;
+    title(['r=' num2str(r)])
+    axis([0,100,0,1])
+    %hold on;
+    for p=0:0.1:2
+        hold on;
+        E0=0.5;         %initial rate of change of
+        M0=0.5;           %E and M don't matter for r=.4 and d=1.8
+        tspan=[0 100];  
+        y0=[4,6];      %if both start out as zero weird things happen initially
+        yp0=[E0;M0];
+        option = odeset('RelTol', 10^-4);
+        [t,y]=ode15i('example1', tspan, y0, yp0, option, r, d);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        semilogy(t,prop)
+    end
+    hold off;
+end
+
+%% Summary of proliferation and conversion from E to M
+% generate heat map of steady states
+clf;
+hold off;
+x=[0:.05:.2];
+y=[1:.1:2];
+imagesc(x,y,ststs(10:21,1:5));
+set(gca,'YDir','normal')
+xlabel('Probability of conversion','FontSize',14)
+ylabel('Ratio of proliferation rates','FontSize',14)
+g=colorbar;
+ylabel(g, '% Epithelial cells','FontSize',14)
+title('Heatmap of steady state proportion of epithelial cells','FontSize',14)
+%% Effect of p and z - where are steady states with feedback?
+% z represents feedback, range from -1 to 1
+% p is ratio of proliferation rates, Rate(E)/Rate(M). Ranges from 0 to 2.
+clf;
+hold off;
+ststs=zeros(21,21);
+for j=1:1:21
+    %j=18;
+    subplot(3,7,j);
+    xlabel('time','FontSize',14)
+    ylabel('E/(E+M)','FontSize',14)
+    p=j*0.1-0.1;
+    title(['p=' num2str(p)])
+    axis([0,50,0,1])
+    hold on;
+    for k=1:1:21
+        %hold on;
+        title(['p=' num2str(p)])
+        z=k*.1-1.1;
+        E0=0.5;         %initial rate of change of
+        M0=0.5;           %E and M don't matter for r=.4 and d=1.8
+        tspan=[0 50];  
+        y0=[4,6];      %if both start out as zero weird things happen initially
+        yp0=[E0;M0];
+        option = odeset('RelTol', 10^-4);
+        [t,y]=ode15i('example3', tspan, y0, yp0, option, p, z);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        semilogy(t,prop)
+        ststs(j,k)=prop(end);
+    end
+    hold off;
+end
+%% Summary of proliferation and conversion with feedback
+% Generate heat map of steady states with feedback
+clf;
+hold off;
+x=[-1:.1:1];
+y=[0:.1:2];
+imagesc(x,y,ststs);
+set(gca,'YDir','normal')
+xlabel('Feedback: hi ep fb & lo mes fb REPLACE_WITH_DASH_DASH> lo ep fb & hi mes fb','FontSize',14)
+ylabel('Ratio of proliferation rates','FontSize',14)
+g=colorbar;
+ylabel(g, '% Epithelial cells','FontSize',14)
+title('Heatmap of steady state proportion of epithelial cells','FontSize',14)
+%colormapeditor
+
+%% Effect of starting ratio of E amd M with different p
+%Does the starting amounts of E and M affect steady states?
+hold off;
+for k=1:1:21
+    p=.1*k-.1;
+    h=subplot(7,3,k);
+    
+    for i=0:1:20
+        title(['p=' num2str(p)])
+        axis([0,50,0,1])
+        xlabel('time','FontSize', 14)
+        ylabel('E/(E+M)','FontSize',14)
+        E0=i;
+        M0=20-i;
+        z=1;
+        tspan=[0 50];
+        y0=[E0;M0];
+        yp0=[.5;-.5];
+        option = odeset('RelTol', 10^-4);
+        [t,y]=ode15i('example3', tspan, y0, yp0, option, p, z);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        plot(t,prop)
+        hold on;
+    end
+    hold off;
+end
+
+%% Effect of starting ratio of E and M with different z
+% Does the starting amounts of E and M affect steady states?
+clf;
+hold off;
+for k=1:1:21
+    z=.1*k-1.1;
+    h=subplot(3,7,k);
+    for i=1:1:21
+        title(['z=' num2str(z)])
+        axis([0,100,0,1])
+        xlabel('time','FontSize', 14)
+        ylabel('E/(E+M)','FontSize',14)
+        E0=i-1;
+        M0=21-i;
+        %d=1.8;
+        p=1;
+        tspan=[0 100];
+        y0=[E0;M0];
+        yp0=[.5;-.5];
+        option = odeset('RelTol', 10^-4);
+        [t,y]=ode15i('example3', tspan, y0, yp0, option, p, z);
+        prop=[y(:,1)]./([y(:,1)]+[y(:,2)]);
+        plot(t,prop)
+        hold on;
+    end
+    hold off;
+end
+%% phase portrait
+
+
+
+##### SOURCE END #####
+--></body></html>
